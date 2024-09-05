@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // previewFeatures = ["referentialIntegrity"]
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @db.VarChar(255)
+  description String   @db.VarChar(600)
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   Int
+  users       User[]
+}
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String    @db.VarChar(255)
+  description String    @db.VarChar(600)
+  tasks       Task[]
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
+}
+
+model Workspace {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String    @db.VarChar(255)
+  description String    @db.VarChar(600)
+  projects    Project[]
+  Account     Account?  @relation(fields: [accountId], references: [id])
+  accountId   Int?
+}
+
+model Account {
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  name        String      @db.VarChar(255)
+  description String      @db.VarChar(600)
+  workspaces  Workspace[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  firstName String   @db.VarChar(255)
+  lastName  String   @db.VarChar(255)
+  tasks     Task[]
+  email     String   @unique
+}
