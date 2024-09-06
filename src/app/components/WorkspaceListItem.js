@@ -10,7 +10,7 @@ export default function WorkspaceListItem({ workspace }) {
     <div>
       <div
         onClick={() => setShowProjects(!showProjects)}
-        className="flex justify-between items-center w-full cursor-pointer"
+        className="flex justify-between items-center w-full cursor-pointer py-1"
       >
         <h2>{workspace.name}</h2>
         <span className="h-4 w-4 flex items-center justify-center">
@@ -20,7 +20,7 @@ export default function WorkspaceListItem({ workspace }) {
       {showProjects && (
         <ul>
           {workspace.projects.map((project) => (
-            <li key={project.id}>
+            <li key={project.id} className="ml-3 py-1">
               <Link href="/project/[id]" as={`/project/${project.id}`}>
                 <h3>{project.name}</h3>
               </Link>

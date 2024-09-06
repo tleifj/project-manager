@@ -18,6 +18,12 @@ export default async function SingleProject({ params }) {
     project.updatedAt = project.updatedAt.toString();
   }
 
+  const workspace = await prisma.workspace.findUnique({
+    where: {
+      id: project.workspaceId,
+    },
+  });
+
   const tasksResults = await prisma.task.findMany({
     where: {
       projectId: parseInt(params.id),
@@ -43,7 +49,7 @@ export default async function SingleProject({ params }) {
   });
   return (
     <>
-      <Topbar name={project.name}></Topbar>
+      <Topbar name={project.name} workspace={{ ...workspace }}></Topbar>
       <div className="py-8">
         <div className="flex w-full py-2 border-b justify-between text-sm gap-4">
           <div className="flex-[0_0_33%]">Name</div>
@@ -57,10 +63,10 @@ export default async function SingleProject({ params }) {
         {tasks.map((task) => {
           return <Task key={task.id} task={task} />;
         })}
+        <button className="text-sm w-full py-2 border-b text-left text-muted-foreground">
+          Add New +
+        </button>
       </div>
-      <Link href="/task/create" as={`/task/create`}>
-        <button>Add Task</button>
-      </Link>
     </>
   );
 }
