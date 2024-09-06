@@ -22,9 +22,7 @@ export default function WorkspaceListItem({ workspace }) {
           {workspace.projects.map((project) => (
             <li key={project.id}>
               <Link href="/project/[id]" as={`/project/${project.id}`}>
-                <a>
-                  <h3>{project.name}</h3>
-                </a>
+                <h3>{project.name}</h3>
               </Link>
             </li>
           ))}

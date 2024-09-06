@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-export default async function handler(req, res) {
+export async function GET(request) {
   const prisma = new PrismaClient();
 
   //   if (method === "GET") {
@@ -18,7 +18,8 @@ export default async function handler(req, res) {
     return workspace;
   });
   //   console.log(result);
-  res.status(200).json(workspaces);
+  // res.status(200).json(workspaces);
+  return Response.json({ workspaces });
   //   } else {
   //     res.status(405).json({ message: "Method not allowed" });
   //   }

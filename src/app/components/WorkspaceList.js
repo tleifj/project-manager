@@ -13,10 +13,12 @@ const WorkspaceList = () => {
   const { data, error } = useSWR(`/api/workspace/all`, fetcher);
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
+  console.log(data);
+
   return (
     <div>
       {/* Loop through each workspace and display the title. If the workspace has projects, display the projects underneath the workspace title */}
-      {data.map((workspace) => (
+      {data.workspaces.map((workspace) => (
         <WorkspaceListItem key={workspace.id} workspace={workspace} />
       ))}
     </div>
