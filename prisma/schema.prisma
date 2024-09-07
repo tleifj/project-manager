@@ -24,6 +24,16 @@ model Task {
   project     Project  @relation(fields: [projectId], references: [id])
   projectId   Int
   users       User[]
+  status      Status   @relation(fields: [statusId], references: [id])
+  statusId    Int
+}
+
+model Status {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @db.VarChar(255)
+  tasks     Task[]
 }
 
 model Project {
