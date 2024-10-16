@@ -2,7 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import Task from "../../components/Task";
 import Link from "next/link";
 import Topbar from "../../components/Topbar";
-
+import NewProject from "../../components/NewProject";
+import { use } from "react";
 const prisma = new PrismaClient();
 
 export default async function SingleWorkspace({ params }) {
@@ -33,9 +34,9 @@ export default async function SingleWorkspace({ params }) {
         {/* {tasks.map((task) => {
           return <Task key={task.id} task={task} />;
         })} */}
-        <button className="text-sm w-full py-2 border-b text-left text-muted-foreground">
-          Add New +
-        </button>
+        {/* Pass the current workspace id to NewProject */}
+
+        <NewProject workspaceId={params.id} />
       </div>
     </>
   );

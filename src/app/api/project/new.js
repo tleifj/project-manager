@@ -8,13 +8,12 @@ export default async function handler(req, res) {
 
   //   if (method === "POST") {
   const { body } = req;
-  console.log(body);
   const { result } = await prisma.project.create({
     data: {
       name: body.name,
       description: body.description,
       workspace: {
-        connect: { id: 2 },
+        connect: { id: parseInt(body.workspaceId) },
       },
     },
     // include: { workspace: true },
