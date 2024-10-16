@@ -1,4 +1,12 @@
+import { useState } from "react";
+import NewTaskModal from "./NewTaskModal"; // Assume we'll create this component
+
 export default function SidebarAccount() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className="sidebar-account flex justify-between items-center">
       <div className="account-info flex justify-between items-center gap-4">
@@ -10,8 +18,9 @@ export default function SidebarAccount() {
         </div>
       </div>
       <div className="account-action">
-        <button>+</button>
+        <button onClick={openModal}>+</button>
       </div>
+      <NewTaskModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 }

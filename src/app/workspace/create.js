@@ -1,13 +1,12 @@
-"use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import Router from "next/router";
 
-export default function NewWorkspace() {
-  const router = useRouter();
+export default function CreateProject() {
   const [form, setForm] = useState({
     name: "",
     description: "",
   });
+
   const handleChange = (e) => {
     const target = e.target;
     const value = target.value;
@@ -23,7 +22,7 @@ export default function NewWorkspace() {
     e.preventDefault();
     try {
       const body = form;
-      await fetch("/api/workspace/new", {
+      await fetch("/api/project/new", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -32,42 +31,32 @@ export default function NewWorkspace() {
         name: "",
         description: "",
       });
-      router.push("/");
+      await Router.push("/projects/");
     } catch (error) {
       console.error(error);
     }
   };
   return (
     <div>
-      <h1 className="text-lg">New Workspace</h1>
+      <h1>Create Project</h1>
       <form onSubmit={handleSubmit}>
-        <label className="block mt-4 mb-1" htmlFor="workspace-name">
-          Name
-        </label>
+        <label htmlFor="name">Name</label>
         <input
-          onChange={handleChange}
           type="text"
-          id="workspace-name"
           name="name"
+          id="name"
           value={form.name}
-          className="block w-full rounded p-2"
-        />
-        <label className="block mt-4 mb-1" htmlFor="workspace-description">
-          Description
-        </label>
-        <input
-          className="block w-full rounded p-2"
           onChange={handleChange}
-          id="workspace-description"
+        />
+        <label htmlFor="description">Description</label>
+        <input
+          type="text"
           name="description"
+          id="description"
           value={form.description}
-        ></input>
-        <button
-          className="bg-primary text-primary-foreground text-sm hover:bg-primary/90 p-2 rounded mt-4"
-          type="submit"
-        >
-          Create Workspace
-        </button>
+          onChange={handleChange}
+        />
+        <button type="submit">Submit</button>
       </form>
     </div>
   );

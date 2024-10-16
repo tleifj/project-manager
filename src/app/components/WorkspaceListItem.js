@@ -12,7 +12,9 @@ export default function WorkspaceListItem({ workspace }) {
         onClick={() => setShowProjects(!showProjects)}
         className="flex justify-between items-center w-full cursor-pointer py-1"
       >
-        <h2>{workspace.name}</h2>
+        <Link href="/project/[id]" as={`/workspace/${workspace.id}`}>
+          <h2>{workspace.name}</h2>
+        </Link>
         <span className="h-4 w-4 flex items-center justify-center">
           <ChevronRight className="max-w-full" />
         </span>
