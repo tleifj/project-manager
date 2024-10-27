@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import Task from "../../components/Task";
 import Link from "next/link";
 import Topbar from "../../components/Topbar";
+import NewTask from "../../components/NewTask";
 
 const prisma = new PrismaClient();
 
@@ -63,9 +64,7 @@ export default async function SingleProject({ params }) {
         {tasks.map((task) => {
           return <Task key={task.id} task={task} />;
         })}
-        <button className="text-sm w-full py-2 border-b text-left text-muted-foreground">
-          Add New +
-        </button>
+        <NewTask projectId={params.id} />
       </div>
     </>
   );

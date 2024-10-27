@@ -17,32 +17,54 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
 
-export default function NewTaskModal({ isOpen, onClose }) {
+export default function NewTaskModal({ isOpen, onClose, projectId }) {
   const [taskName, setTaskName] = useState("");
-  const [workspaceId, setWorkspaceId] = useState("");
-  const [workspaces, setWorkspaces] = useState([]);
+  const [statusId, setStatusId] = useState("");
+  const [statuses, setStatuses] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchWorkspaces = async () => {
+    // get all statuses from supabase
+    // fetch all statuses
+    const fetchStatuses = async () => {
       try {
-        const response = await fetch("/api/workspace/all");
+        const response = await fetch("/api/status/all");
         const data = await response.json();
-        console.log(data.workspaces);
+        console.log(data.statuses);
 
-        setWorkspaces(data.workspaces);
+        setStatuses(data.statuses);
       } catch (error) {
-        console.error("Error fetching workspaces:", error);
+        console.error("Error fetching statuses:", error);
       }
     };
 
-    fetchWorkspaces();
+    fetchStatuses();
   }, []);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Add logic to create a new task
-    console.log("New task:", taskName, "in workspace:", workspaceId);
+    try {
+      const body = {
+        name: taskName,
+        projectId,
+        status: statusId.replace(/['"]+/g, ""),
+      };
+      await fetch("/api/task/new", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      setForm({
+        name: "",
+        status: "",
+      });
+    } catch (error) {
+      console.error(error);
+    }
     onClose();
+    router.refresh();
   };
 
   return (
@@ -59,18 +81,16 @@ export default function NewTaskModal({ isOpen, onClose }) {
             placeholder="Enter task name"
             required
           />
-          <Select value={workspaceId} onValueChange={setWorkspaceId}>
+
+          <Select value={statusId} onValueChange={setStatusId}>
             <SelectTrigger>
-              <SelectValue placeholder="Select a workspace" />
+              <SelectValue placeholder="Select a status" />
             </SelectTrigger>
             <SelectContent>
-              {workspaces &&
-                workspaces.map((workspace) => (
-                  <SelectItem
-                    key={workspace.id}
-                    value={'"' + workspace.id + '"'}
-                  >
-                    {workspace.name}
+              {statuses &&
+                statuses.map((status) => (
+                  <SelectItem key={status.id} value={'"' + status.id + '"'}>
+                    {status.name}
                   </SelectItem>
                 ))}
             </SelectContent>

@@ -47,7 +47,7 @@ const Sidebar = () => {
   let [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="p-6">
+    <div className="p-6 w-[400px]">
       <SidebarAccount />
       <nav className="app-main-nav py-8 text-sm">
         <ul>

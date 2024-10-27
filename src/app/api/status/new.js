@@ -1,4 +1,4 @@
-// This is the endpoint for creating a new task
+// This is the endpoint for creating a new project
 
 // This is needed to interact with database via Prisma
 import { PrismaClient } from "@prisma/client";
@@ -9,18 +9,12 @@ export default async function handler(req, res) {
   //   if (method === "POST") {
   const { body } = req;
   console.log(body);
-  const { result } = await prisma.task.create({
+  const { result } = await prisma.workspace.create({
     data: {
       name: body.name,
       description: body.description,
-      project: {
-        connect: { id: parseInt(body.project) },
-      },
-      users: {
-        connect: [{ id: parseInt(body.users) }],
-      },
     },
-    include: { users: true, project: true },
+    // include: { workspace: true },
   });
   res.status(200).json(result);
 }
