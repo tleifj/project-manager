@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Task({ task }) {
+export default function Task({ task, statuses }) {
   console.log(task);
   return (
     <div
@@ -12,7 +12,13 @@ export default function Task({ task }) {
         {" "}
         {task.users.map((user) => user.firstName + " " + user.lastName)}
       </div>
-      <div className="table-cell">Status</div>
+      <div className="table-cell">
+        {statuses.map((status) => {
+          if (status.id === task.statusId) {
+            return status.name;
+          }
+        })}
+      </div>
       <div className=" flex gap-4">
         <div className="table-cell">Start</div>
         <div className="table-cell">Finish</div>

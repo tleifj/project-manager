@@ -19,9 +19,11 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 
-export default function NewTaskModal({ isOpen, onClose, projectId }) {
+export default function NewTaskModal({ isOpen, onClose, projectId, status }) {
   const [taskName, setTaskName] = useState("");
-  const [statusId, setStatusId] = useState("");
+  const [statusId, setStatusId] = useState(
+    (status && status.id.toString()) || ""
+  );
   const [statuses, setStatuses] = useState([]);
   const router = useRouter();
 
@@ -89,7 +91,7 @@ export default function NewTaskModal({ isOpen, onClose, projectId }) {
             <SelectContent>
               {statuses &&
                 statuses.map((status) => (
-                  <SelectItem key={status.id} value={'"' + status.id + '"'}>
+                  <SelectItem key={status.id} value={status.id.toString()}>
                     {status.name}
                   </SelectItem>
                 ))}

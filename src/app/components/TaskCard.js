@@ -5,7 +5,7 @@ export default function Task({ task }) {
   return (
     <article
       key={task.id}
-      className="p-4 border border-solid border-gray rounded"
+      className="p-6 border border-solid border-gray rounded bg-white"
     >
       <h1>{task.name}</h1>{" "}
       {task.users.map((user) => user.firstName + " " + user.lastName)}

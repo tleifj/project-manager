@@ -16,7 +16,7 @@ export default function TasksInterface({ tasks, params, statuses }) {
   return (
     <>
       {" "}
-      <div className="flex justify-end align-center">
+      <div className="flex justify-end align-center py-4">
         <ToggleGroup type="single">
           {/* Set toggle item to active if view === list */}
           <ToggleGroupItem
@@ -48,7 +48,7 @@ export default function TasksInterface({ tasks, params, statuses }) {
             </div>
           </div>
           {tasks.map((task) => {
-            return <Task key={task.id} task={task} />;
+            return <Task key={task.id} task={task} statuses={statuses} />;
           })}
           <NewTask projectId={params.id} />
         </div>
@@ -62,11 +62,11 @@ export default function TasksInterface({ tasks, params, statuses }) {
                 <Droppable key={status.id} droppableId={status.name}>
                   {(provided, snapshot) => (
                     <div
-                      className="flex-[0_0_25%]"
+                      className="flex-[0_0_25%] bg-secondary py-4 px-2 rounded"
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      <h2>{status.name}</h2>
+                      <h2 className="font-bold">{status.name}</h2>
                       <div className="flex flex-col gap-4">
                         {tasks.map((task, index) => {
                           if (task.statusId !== status.id) return null;
@@ -91,6 +91,7 @@ export default function TasksInterface({ tasks, params, statuses }) {
                             </Draggable>
                           );
                         })}
+                        <NewTask projectId={params.id} status={status} />
                       </div>
                     </div>
                   )}

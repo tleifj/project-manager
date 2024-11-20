@@ -3,11 +3,12 @@ import React, { useState } from "react";
 
 import NewTaskModal from "./NewTaskModal";
 
-export default function NewTask({ projectId }) {
+export default function NewTask({ projectId, status }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
   return (
     <>
       <button
@@ -20,6 +21,7 @@ export default function NewTask({ projectId }) {
         projectId={projectId}
         isOpen={isModalOpen}
         onClose={closeModal}
+        status={status}
       />
     </>
   );
