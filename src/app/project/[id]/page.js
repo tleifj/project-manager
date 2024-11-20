@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import Task from "../../components/Task";
 import Link from "next/link";
+import TasksInterface from "../../components/TasksInterface";
 import Topbar from "../../components/Topbar";
-import NewTask from "../../components/NewTask";
+import { log } from "console";
 
 const prisma = new PrismaClient();
 
@@ -48,24 +48,12 @@ export default async function SingleProject({ params }) {
     }
     return task;
   });
+
+  const statuses = await prisma.status.findMany();
   return (
     <>
       <Topbar name={project.name} workspace={{ ...workspace }}></Topbar>
-      <div className="py-8">
-        <div className="flex w-full py-2 border-b justify-between text-sm gap-4">
-          <div className="flex-[0_0_33%]">Name</div>
-          <div className="flex-[0_0_25%]">Assigned</div>
-          <div className="table-cell">Status</div>
-          <div className=" flex gap-4">
-            <div className="table-cell">Start</div>
-            <div className="table-cell">Finish</div>
-          </div>
-        </div>
-        {tasks.map((task) => {
-          return <Task key={task.id} task={task} />;
-        })}
-        <NewTask projectId={params.id} />
-      </div>
+      <TasksInterface tasks={tasks} params={params} statuses={statuses} />
     </>
   );
 }

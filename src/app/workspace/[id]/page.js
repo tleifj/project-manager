@@ -19,6 +19,32 @@ export default async function SingleWorkspace({ params }) {
     workspace.updatedAt = workspace.updatedAt.toString();
   }
 
+  const projectsResults = await prisma.project.findMany({
+    where: {
+      workspaceId: parseInt(params.id),
+    },
+    // include: { users: true },
+  });
+
+  const projects = projectsResults.map((project) => {
+    // console.log(project.users);
+    project.createdAt = project.createdAt.toString();
+    project.updatedAt = project.updatedAt.toString();
+    // if (project.users.length > 0) {
+    //   const users = project.users.map((user) => {
+    //     // user.createdAt = user.createdAt.toString();
+    //     user.createdAt = user.createdAt.toString();
+    //     user.updatedAt = user.updatedAt.toString();
+    //     // console.log(user);
+    //     // user.assignedAt = user.assignedAt.toString();
+    //     return user;
+    //   });
+    // }
+    return project;
+  });
+
+  console.log(projects);
+
   return (
     <>
       {/* <Topbar name={project.name} workspace={{ ...workspace }}></Topbar> */}
@@ -31,18 +57,20 @@ export default async function SingleWorkspace({ params }) {
             <div className="table-cell">Finish</div>
           </div>
         </div>
-        {/* {tasks.map((task) => {
-          return <Task key={task.id} task={task} />;
-        })} */}
-        {/* Pass the current workspace id to NewProject */}
+        {projects.map((project) => {
+          return (
+            <Link
+              key={project.id}
+              href="/project/[id]"
+              as={`/project/${project.id}`}
+            >
+              <span>{project.name}</span>
+            </Link>
+          );
+        })}
 
         <NewProject workspaceId={params.id} />
       </div>
     </>
   );
 }
-
-// export async function getServerSideProps(params) {
-
-//   return { props: { project, tasks } };
-// }
