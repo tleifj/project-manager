@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-import NewTaskModal from "./NewTaskModal";
+import TaskModal from "./TaskModal";
 
 export default function NewTask({ projectId, status }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,7 +17,7 @@ export default function NewTask({ projectId, status }) {
       >
         Add New Task +
       </button>
-      <NewTaskModal
+      <TaskModal
         projectId={projectId}
         isOpen={isModalOpen}
         onClose={closeModal}
