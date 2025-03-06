@@ -24,25 +24,31 @@ export default function NewTaskModal({ isOpen, onClose, projectId, status }) {
   const [statusId, setStatusId] = useState(
     (status && status.id.toString()) || ""
   );
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [statuses, setStatuses] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
-    // get all statuses from supabase
-    // fetch all statuses
-    const fetchStatuses = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/status/all");
-        const data = await response.json();
-        console.log(data.statuses);
+        // Fetch statuses
+        const statusResponse = await fetch("/api/status/all");
+        const statusData = await statusResponse.json();
+        setStatuses(statusData.statuses);
 
-        setStatuses(data.statuses);
+        // Fetch users
+        const userResponse = await fetch("/api/user/all");
+        const userData = await userResponse.json();
+        setUsers(userData.users);
       } catch (error) {
-        console.error("Error fetching statuses:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchStatuses();
+    fetchData();
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +57,9 @@ export default function NewTaskModal({ isOpen, onClose, projectId, status }) {
       const body = {
         name: taskName,
         projectId,
+        startDate: startDate || null,
+        endDate: endDate || null,
+        userIds: selectedUsers,
         status: statusId.replace(/['"]+/g, ""),
       };
       await fetch("/api/task/new", {
@@ -58,10 +67,11 @@ export default function NewTaskModal({ isOpen, onClose, projectId, status }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      setForm({
-        name: "",
-        status: "",
-      });
+      setTaskName("");
+      setStartDate("");
+      setEndDate("");
+      setStatusId("");
+      setSelectedUsers([]);
     } catch (error) {
       console.error(error);
     }
@@ -83,6 +93,60 @@ export default function NewTaskModal({ isOpen, onClose, projectId, status }) {
             placeholder="Enter task name"
             required
           />
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label htmlFor="startDate" className="text-sm font-medium">
+                Start Date
+              </label>
+              <Input
+                type="datetime-local"
+                id="startDate"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="endDate" className="text-sm font-medium">
+                End Date
+              </label>
+              <Input
+                type="datetime-local"
+                id="endDate"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                min={startDate}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Assign Users</label>
+            <div className="border rounded-md p-4 space-y-2">
+              {users.map((user) => (
+                <div key={user.id} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id={`user-${user.id}`}
+                    checked={selectedUsers.includes(user.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedUsers([...selectedUsers, user.id]);
+                      } else {
+                        setSelectedUsers(
+                          selectedUsers.filter((id) => id !== user.id)
+                        );
+                      }
+                    }}
+                    className="h-4 w-4 rounded border-gray-300"
+                  />
+                  <label htmlFor={`user-${user.id}`} className="text-sm">
+                    {user.firstName} {user.lastName}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <Select value={statusId} onValueChange={setStatusId}>
             <SelectTrigger>

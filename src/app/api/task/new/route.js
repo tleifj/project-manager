@@ -1,28 +1,37 @@
 import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
+
 export async function POST(req) {
-  const prisma = new PrismaClient();
+  try {
+    const body = await req.json();
+    console.log("Creating task with body:", body);
 
-  //   Get the body of the request
-  const body = await req.json();
-  console.log(body);
-  const result = await prisma.task.create({
-    data: {
-      name: body.name,
-      description: "test",
-      project: {
-        connect: { id: parseInt(body.projectId) },
+    const result = await prisma.task.create({
+      data: {
+        name: body.name,
+        description: "test",
+        startDate: body.startDate ? new Date(body.startDate) : null,
+        endDate: body.endDate ? new Date(body.endDate) : null,
+        project: {
+          connect: { id: parseInt(body.projectId) },
+        },
+        status: {
+          connect: { id: parseInt(body.status) },
+        },
+        users: body.userIds && body.userIds.length > 0 ? {
+          connect: body.userIds.map(id => ({ id: parseInt(id) })),
+        } : undefined,
       },
-      status: {
-        connect: { id: parseInt(body.status) },
-      },
-      //   users: {
-      //     connect: [{ id: parseInt(body.users) }],
-      //   },
-    },
-    include: { project: true, status: true },
+      include: { project: true, status: true, users: true },
+    });
 
-    // include: { users: true, project: true },
-  });
-  return Response.json(result);
+    return Response.json(result);
+  } catch (error) {
+    console.error("Error creating task:", error);
+    return Response.json(
+      { error: "Failed to create task", details: error.message },
+      { status: 500 }
+    );
+  }
 }
