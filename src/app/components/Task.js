@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useProjectContext } from "../context/ProjectContext";
 import TaskModal from "./TaskModal";
 
-export default function Task({ task, statuses }) {
+export default function Task({ task }) {
+  const { statuses } = useProjectContext();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const formatDate = (date) => {
@@ -30,7 +32,14 @@ export default function Task({ task, statuses }) {
         <div className="flex-[0_0_15%]">
           {statuses.map((status) => {
             if (status.id === task.statusId) {
-              return status.name;
+              return (
+                <span
+                  key={status.id}
+                  className={`px-2 py-1 status-${status.id} rounded-full`}
+                >
+                  {status.name}
+                </span>
+              );
             }
           })}
         </div>

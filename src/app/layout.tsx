@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Sidebar from "./components/sidebar";
+import { ProjectProvider } from "./context/ProjectContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,10 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="app-wrapper flex h-[100dvh] w-[100%]">
-          <Sidebar></Sidebar>
-          <main className="table wrapper py-6 px-10 grow">{children}</main>
-        </div>
+        <ProjectProvider>
+          <div className="app-wrapper flex h-[100dvh] w-[100%]">
+            <Sidebar></Sidebar>
+            <main className="table wrapper py-6 px-10 grow">{children}</main>
+          </div>
+        </ProjectProvider>
       </body>
     </html>
   );

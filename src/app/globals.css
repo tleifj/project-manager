@@ -90,3 +90,27 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.status-1 {
+  background: #e2e2e2;
+}
+
+.status-2 {
+  background: #d8d8d8;
+  color: #212121;
+}
+
+.status-3 {
+  background: #2d7aed;
+  color: #ffffff;
+}
+
+.status-4 {
+  background: #24cf62;
+  color: #ffffff;
+}
+
+.status-5 {
+  background: #8c8c8c;
+  color: #ffffff;
+}

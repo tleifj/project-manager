@@ -49,11 +49,10 @@ export default async function SingleProject({ params }) {
     return task;
   });
 
-  const statuses = await prisma.status.findMany();
   return (
     <>
       <Topbar name={project.name} workspace={{ ...workspace }}></Topbar>
-      <TasksInterface tasks={tasks} params={params} statuses={statuses} />
+      <TasksInterface tasks={tasks} params={params} />
     </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useProjectContext } from "../context/ProjectContext";
 import {
   Dialog,
   DialogContent,
@@ -30,26 +31,14 @@ export default function TaskModal({
   const [statusId, setStatusId] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [statuses, setStatuses] = useState([]);
-  const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const router = useRouter();
+  const { users, statuses, isLoading } = useProjectContext();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch statuses
-        const statusResponse = await fetch("/api/status/all");
-        const statusData = await statusResponse.json();
-        setStatuses(statusData.statuses);
-
-        // Fetch users
-        const userResponse = await fetch("/api/user/all");
-        const userData = await userResponse.json();
-        setUsers(userData.users);
-
-        // If editing existing task, fetch task data
-        if (taskId) {
+    const fetchTaskData = async () => {
+      if (taskId) {
+        try {
           const taskResponse = await fetch(`/api/task/${taskId}`);
           const taskData = await taskResponse.json();
 
@@ -66,16 +55,16 @@ export default function TaskModal({
               : ""
           );
           setSelectedUsers(taskData.users.map((user) => user.id));
-        } else {
-          // For new task, set initial status if provided
-          setStatusId((status && status.id.toString()) || "");
+        } catch (error) {
+          console.error("Error fetching task data:", error);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } else {
+        // For new task, set initial status if provided
+        setStatusId((status && status.id.toString()) || "");
       }
     };
 
-    fetchData();
+    fetchTaskData();
   }, [taskId, status]);
 
   const handleSubmit = async (e) => {
@@ -166,31 +155,35 @@ export default function TaskModal({
           <div className="space-y-2">
             <label className="text-sm font-medium">Assign Users</label>
             <div className="border rounded-md p-4 space-y-2 max-h-48 overflow-y-auto">
-              {users.map((user) => (
-                <div key={user.id} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id={`user-${user.id}`}
-                    checked={selectedUsers.includes(user.id)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedUsers([...selectedUsers, user.id]);
-                      } else {
-                        setSelectedUsers(
-                          selectedUsers.filter((id) => id !== user.id)
-                        );
-                      }
-                    }}
-                    className="h-4 w-4 rounded border-gray-300"
-                  />
-                  <label
-                    htmlFor={`user-${user.id}`}
-                    className="text-sm text-gray-900"
-                  >
-                    {user.firstName} {user.lastName}
-                  </label>
-                </div>
-              ))}
+              {isLoading ? (
+                <div className="text-sm text-gray-500">Loading users...</div>
+              ) : (
+                users.map((user) => (
+                  <div key={user.id} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id={`user-${user.id}`}
+                      checked={selectedUsers.includes(user.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedUsers([...selectedUsers, user.id]);
+                        } else {
+                          setSelectedUsers(
+                            selectedUsers.filter((id) => id !== user.id)
+                          );
+                        }
+                      }}
+                      className="h-4 w-4 rounded border-gray-300"
+                    />
+                    <label
+                      htmlFor={`user-${user.id}`}
+                      className="text-sm text-gray-900"
+                    >
+                      {user.firstName} {user.lastName}
+                    </label>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
