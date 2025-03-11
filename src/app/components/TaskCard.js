@@ -17,7 +17,7 @@ export default function Task({ task }) {
     <>
       <article
         key={task.id}
-        className="p-6 border border-solid border-gray rounded bg-white space-y-3"
+        className="p-6 border border-solid border-gray rounded bg-white text-black space-y-3"
       >
         <h1 className="text-lg font-semibold">{task.name}</h1>
         <div className="text-sm text-gray-600 space-y-1">

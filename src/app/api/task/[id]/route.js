@@ -7,21 +7,31 @@ export async function PUT(req, { params }) {
     const taskId = parseInt(params.id);
     const body = await req.json();
 
+    // Build update data based on what fields were provided
+    const updateData = {};
+
+    if (body.name !== undefined) updateData.name = body.name;
+    if (body.description !== undefined)
+      updateData.description = body.description;
+    if (body.startDate !== undefined)
+      updateData.startDate = body.startDate ? new Date(body.startDate) : null;
+    if (body.endDate !== undefined)
+      updateData.endDate = body.endDate ? new Date(body.endDate) : null;
+    if (body.status !== undefined) {
+      updateData.status = {
+        connect: { id: parseInt(body.status) },
+      };
+    }
+    if (body.userIds !== undefined) {
+      updateData.users = {
+        set: [], // First disconnect all users
+        connect: body.userIds.map((id) => ({ id: parseInt(id) })), // Then connect selected users
+      };
+    }
+
     const result = await prisma.task.update({
       where: { id: taskId },
-      data: {
-        name: body.name,
-        description: body.description || "test",
-        startDate: body.startDate ? new Date(body.startDate) : null,
-        endDate: body.endDate ? new Date(body.endDate) : null,
-        status: {
-          connect: { id: parseInt(body.status) },
-        },
-        users: {
-          set: [], // First disconnect all users
-          connect: body.userIds ? body.userIds.map(id => ({ id: parseInt(id) })) : [], // Then connect selected users
-        },
-      },
+      data: updateData,
       include: { project: true, status: true, users: true },
     });
 

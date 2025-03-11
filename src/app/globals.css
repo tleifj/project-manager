@@ -95,9 +95,17 @@ body {
   background: #e2e2e2;
 }
 
+.status-board-1 {
+  background: rgba(226, 226, 226, 0.3);
+}
+
 .status-2 {
   background: #d8d8d8;
   color: #212121;
+}
+
+.status-board-2 {
+  background: rgba(216, 216, 216, 0.3);
 }
 
 .status-3 {
@@ -105,12 +113,24 @@ body {
   color: #ffffff;
 }
 
+.status-board-3 {
+  background: rgba(45, 122, 233, 0.3);
+}
+
 .status-4 {
   background: #24cf62;
   color: #ffffff;
 }
 
+.status-board-4 {
+  background: rgba(36, 207, 98, 0.3);
+}
+
 .status-5 {
   background: #8c8c8c;
   color: #ffffff;
+}
+
+.status-board-5 {
+  background: rgba(140, 140, 140, 0.3);
 }

@@ -6,7 +6,8 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import Task from "./Task";
 import TaskCard from "./TaskCard";
 import NewTask from "./NewTask";
-import { List, Kanban } from "lucide-react";
+import { List, Kanban, GanttChart } from "lucide-react";
+import GanttView from "./GanttView";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useRouter } from "next/navigation";
 
@@ -41,6 +42,13 @@ export default function TasksInterface({ tasks, params }) {
           >
             <Kanban className="h-4 w-4" />
           </ToggleGroupItem>
+          <ToggleGroupItem
+            value="gantt"
+            onClick={() => setView("gantt")}
+            data-state={view === "gantt" ? "on" : "off"}
+          >
+            <GanttChart className="h-4 w-4" />
+          </ToggleGroupItem>
         </ToggleGroup>
       </div>
       {isLoading ? (
@@ -64,6 +72,12 @@ export default function TasksInterface({ tasks, params }) {
             <NewTask projectId={params.id} />
           </div>
         )
+      )}
+      {/* show the following when view === gantt */}
+      {view === "gantt" && !isLoading && (
+        <div className="py-8">
+          <GanttView tasks={localTasks} />
+        </div>
       )}
       {/* show the following when view === kanban */}
       {view === "kanban" && (
@@ -92,8 +106,8 @@ export default function TasksInterface({ tasks, params }) {
               setLocalTasks(updatedTasks);
 
               // Get the task that's being moved
-              const taskToUpdate = localTasks.find(t => t.id === taskId);
-              
+              const taskToUpdate = localTasks.find((t) => t.id === taskId);
+
               // Update the backend
               await fetch(`/api/task/${taskId}`, {
                 method: "PUT",
@@ -103,7 +117,7 @@ export default function TasksInterface({ tasks, params }) {
                   projectId: taskToUpdate.projectId,
                   startDate: taskToUpdate.startDate,
                   endDate: taskToUpdate.endDate,
-                  userIds: taskToUpdate.users.map(user => user.id),
+                  userIds: taskToUpdate.users.map((user) => user.id),
                   status: destStatus.id.toString(),
                 }),
               });
@@ -122,7 +136,7 @@ export default function TasksInterface({ tasks, params }) {
                 <Droppable key={status.id} droppableId={status.name}>
                   {(provided, snapshot) => (
                     <div
-                      className={`flex-[0_0_25%] status-${status.id} py-4 px-2 rounded`}
+                      className={`flex-[0_0_25%] status-board-${status.id} py-4 px-2 rounded`}
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
