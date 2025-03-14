@@ -3,8 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Sidebar from "./components/sidebar";
 import { ProjectProvider } from "./context/ProjectContext";
-import { getServerSession } from "next-auth";
-import SessionProvider from "../components/SessionProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,21 +25,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider session={session}>
-          <ProjectProvider>
-            <div className="app-wrapper flex h-[100dvh] w-[100%]">
-              <Sidebar></Sidebar>
-              <main className="table wrapper py-6 px-10 grow">{children}</main>
-            </div>
-          </ProjectProvider>
-        </SessionProvider>
+        <ProjectProvider>
+          <div className="app-wrapper flex h-[100dvh] w-[100%]">
+            <Sidebar></Sidebar>
+            <main className="table wrapper py-6 px-10 grow">{children}</main>
+          </div>
+        </ProjectProvider>
       </body>
     </html>
   );
