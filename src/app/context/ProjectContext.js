@@ -35,8 +35,53 @@ export function ProjectProvider({ children }) {
     fetchData();
   }, []);
 
+  const addStatus = async (name) => {
+    try {
+      const response = await fetch('/api/status/new', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+      });
+
+      if (response.ok) {
+        const newStatus = await response.json();
+        setStatuses([...statuses, newStatus]);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error adding status:', error);
+      return false;
+    }
+  };
+
+  const deleteStatus = async (id) => {
+    try {
+      const response = await fetch(`/api/status/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setStatuses(statuses.filter(status => status.id !== id));
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error deleting status:', error);
+      return false;
+    }
+  };
+
   return (
-    <ProjectContext.Provider value={{ users, statuses, isLoading }}>
+    <ProjectContext.Provider value={{ 
+      users, 
+      statuses, 
+      isLoading,
+      addStatus,
+      deleteStatus
+    }}>
       {children}
     </ProjectContext.Provider>
   );

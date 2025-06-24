@@ -17,7 +17,7 @@ export async function POST(req) {
           connect: { id: parseInt(body.projectId) },
         },
         status: {
-          connect: { id: parseInt(body.status) },
+          connect: { id: parseInt(body.status.toString().replace(/["']+/g, '')) },
         },
         users: body.userIds && body.userIds.length > 0 ? {
           connect: body.userIds.map(id => ({ id: parseInt(id) })),

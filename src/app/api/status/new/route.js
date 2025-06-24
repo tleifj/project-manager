@@ -6,12 +6,10 @@ export async function POST(req) {
   //   Get the body of the request
   const body = await req.json();
   console.log(body);
-  const result = await prisma.workspace.create({
+  const result = await prisma.status.create({
     data: {
       name: body.name,
-      description: body.description,
     },
-    // include: { workspace: true },
   });
   return Response.json(result);
 }
