@@ -5,9 +5,10 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
+  relationMode = "prisma"
 }
 
 generator client {
@@ -16,103 +17,62 @@ generator client {
 }
 
 model Task {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  name        String   @db.VarChar(255)
-  description String   @db.VarChar(600)
-  startDate   DateTime?
-  endDate     DateTime?
-  project     Project  @relation(fields: [projectId], references: [id])
-  projectId   Int
-  users       User[]
-  status      Status   @relation(fields: [statusId], references: [id])
-  statusId    Int
+  id             String   @id @default(uuid()) @db.Uuid
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String   @db.VarChar(255)
+  description    String?  @db.VarChar(600)
+  organizationId String   @db.Uuid
+  projectId      String   @db.Uuid
+  project        Project  @relation(fields: [projectId], references: [id])
+
+  @@index([organizationId, projectId])
 }
 
-model Status {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @db.VarChar(255)
-  tasks     Task[]
-}
+// Optional: define a Status model later scoped by organization if needed
 
 model Project {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  name        String    @db.VarChar(255)
-  description String    @db.VarChar(600)
-  tasks       Task[]
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
-  workspaceId Int
+  id             String       @id @default(uuid()) @db.Uuid
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  name           String       @db.VarChar(255)
+  description    String?      @db.VarChar(600)
+  organizationId String       @db.Uuid
+  workspaceId    String       @db.Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  workspace      Workspace    @relation(fields: [workspaceId], references: [id])
+  tasks          Task[]
+
+  @@index([organizationId, workspaceId])
 }
 
 model Workspace {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  name        String    @db.VarChar(255)
-  description String    @db.VarChar(600)
-  projects    Project[]
-  organization     Organization?  @relation(fields: [organizationId], references: [id])
-  organizationId   Int?
+  id             String       @id @default(uuid()) @db.Uuid
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  name           String       @db.VarChar(255)
+  description    String?      @db.VarChar(600)
+  organizationId String       @db.Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  projects       Project[]
+
+  @@index([organizationId])
 }
 
 model Organization {
-  id          Int         @id @default(autoincrement())
+  id          String      @id @default(uuid()) @db.Uuid
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   name        String      @db.VarChar(255)
-  description String      @db.VarChar(600)
+  description String?     @db.VarChar(600)
+  createdBy   String?     @db.Uuid
   workspaces  Workspace[]
+  projects    Project[]
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  firstName     String    @db.VarChar(255)
-  lastName      String    @db.VarChar(255)
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  tasks         Task[]
-  accounts      Account[]
-  sessions      Session[]
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+// Supabase Auth is the source of truth for users.
+// Map a single organization per user via this table.
+model UserOrganization {
+  userId         String @id @db.Uuid
+  organizationId String @db.Uuid
 }
