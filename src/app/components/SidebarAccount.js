@@ -1,8 +1,11 @@
 import { useState } from "react";
 import NewTaskModal from "./NewTaskModal"; // Assume we'll create this component
+import { useProjectContext } from "../context/ProjectContext";
 
 export default function SidebarAccount() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { organization } = useProjectContext();
+  console.log(organization);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -14,7 +17,7 @@ export default function SidebarAccount() {
           {/* <img src="/avatar.jpg" alt="" /> */}
         </div>
         <div className="user-info">
-          <p className="text-xs  mb-0">Visceral</p>
+          <p className="text-xs  mb-0">{organization?.name}</p>
         </div>
       </div>
       <div className="account-action">

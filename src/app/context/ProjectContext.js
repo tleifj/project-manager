@@ -7,6 +7,7 @@ const ProjectContext = createContext();
 export function ProjectProvider({ children }) {
   const [users, setUsers] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [organization, setOrganization] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,6 +24,10 @@ export function ProjectProvider({ children }) {
         // ]);
         // setUsers(userData.users);
         // setStatuses(statusData.statuses);
+        // Fetch current organization
+        const orgResponse = await fetch("/api/organization/current");
+        const orgData = await orgResponse.json();
+        setOrganization(orgData.organization);
       } catch (error) {
         console.error("Error fetching global data:", error);
       } finally {
@@ -76,6 +81,7 @@ export function ProjectProvider({ children }) {
     <ProjectContext.Provider
       value={{
         users,
+        organization,
         statuses,
         isLoading,
         addStatus,
