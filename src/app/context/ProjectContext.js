@@ -13,18 +13,16 @@ export function ProjectProvider({ children }) {
     const fetchData = async () => {
       try {
         // Fetch users and statuses in parallel
-        const [userResponse, statusResponse] = await Promise.all([
-          fetch("/api/user/all"),
-          fetch("/api/status/all"),
-        ]);
-
-        const [userData, statusData] = await Promise.all([
-          userResponse.json(),
-          statusResponse.json(),
-        ]);
-
-        setUsers(userData.users);
-        setStatuses(statusData.statuses);
+        // const [userResponse, statusResponse] = await Promise.all([
+        //   fetch("/api/user/all"),
+        //   fetch("/api/status/all"),
+        // ]);
+        // const [userData, statusData] = await Promise.all([
+        //   userResponse.json(),
+        //   statusResponse.json(),
+        // ]);
+        // setUsers(userData.users);
+        // setStatuses(statusData.statuses);
       } catch (error) {
         console.error("Error fetching global data:", error);
       } finally {
@@ -37,10 +35,10 @@ export function ProjectProvider({ children }) {
 
   const addStatus = async (name) => {
     try {
-      const response = await fetch('/api/status/new', {
-        method: 'POST',
+      const response = await fetch("/api/status/new", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ name }),
       });
@@ -52,7 +50,7 @@ export function ProjectProvider({ children }) {
       }
       return false;
     } catch (error) {
-      console.error('Error adding status:', error);
+      console.error("Error adding status:", error);
       return false;
     }
   };
@@ -60,28 +58,30 @@ export function ProjectProvider({ children }) {
   const deleteStatus = async (id) => {
     try {
       const response = await fetch(`/api/status/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
-        setStatuses(statuses.filter(status => status.id !== id));
+        setStatuses(statuses.filter((status) => status.id !== id));
         return true;
       }
       return false;
     } catch (error) {
-      console.error('Error deleting status:', error);
+      console.error("Error deleting status:", error);
       return false;
     }
   };
 
   return (
-    <ProjectContext.Provider value={{ 
-      users, 
-      statuses, 
-      isLoading,
-      addStatus,
-      deleteStatus
-    }}>
+    <ProjectContext.Provider
+      value={{
+        users,
+        statuses,
+        isLoading,
+        addStatus,
+        deleteStatus,
+      }}
+    >
       {children}
     </ProjectContext.Provider>
   );

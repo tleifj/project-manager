@@ -65,7 +65,7 @@ const Sidebar = () => {
             +
           </button>
         </div>
-        <WorkspaceList />
+        {/* <WorkspaceList /> */}
       </nav>
       <Modal showModal={showModal} setShowModal={setShowModal} />
     </div>

@@ -23,6 +23,7 @@ export default function NewWorkspace() {
     e.preventDefault();
     try {
       const body = form;
+      // TODO: Get organizationId from context
       await fetch("/api/workspace/new", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,13 +51,13 @@ export default function NewWorkspace() {
           id="workspace-name"
           name="name"
           value={form.name}
-          className="block w-full rounded p-2"
+          className="block w-full rounded p-2 border"
         />
         <label className="block mt-4 mb-1" htmlFor="workspace-description">
           Description
         </label>
         <input
-          className="block w-full rounded p-2"
+          className="block w-full rounded p-2 border"
           onChange={handleChange}
           id="workspace-description"
           name="description"

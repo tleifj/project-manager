@@ -10,6 +10,11 @@ export async function POST(req) {
     data: {
       name: body.name,
       description: body.description,
+      organization: {
+        connect: {
+          id: body.organizationId,
+        },
+      },
     },
     // include: { workspace: true },
   });

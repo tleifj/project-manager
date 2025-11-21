@@ -1,14 +1,8 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServer, getAuthUserId } from "@/utils/supabaseServer";
+import { createClient } from "@/utils/supabase/server";
 
 export async function POST(req) {
-  console.log(req);
-  const supabase = getSupabaseServer();
-  const userId = await getAuthUserId();
-  console.log(userId);
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const supabase = await createClient();
 
   try {
     // Check if user already has an organization mapping
