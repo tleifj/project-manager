@@ -14,7 +14,7 @@ export default function SidebarAccount() {
           {/* <img src="/avatar.jpg" alt="" /> */}
         </div>
         <div className="user-info">
-          <p className="text-xs mb-0">Visceral</p>
+          <p className="text-xs  mb-0">Visceral</p>
         </div>
       </div>
       <div className="account-action">

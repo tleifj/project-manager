@@ -22,7 +22,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={signInWithGoogle}
-          className="w-full h-10 rounded-md bg-blue-600 px-4 text-white font-medium hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          className="w-full h-10 rounded-md bg-blue-600 px-4 text-black dark:text-white font-medium hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           aria-label="Sign in with Google"
         >
           Sign in with Google
