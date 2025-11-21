@@ -1,8 +1,5 @@
 import useSWR from "swr";
-import { PrismaClient } from "@prisma/client";
 import WorkspaceListItem from "./WorkspaceListItem";
-
-const prisma = new PrismaClient();
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 

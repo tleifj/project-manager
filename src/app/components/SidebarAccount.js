@@ -5,7 +5,6 @@ import { useProjectContext } from "../context/ProjectContext";
 export default function SidebarAccount() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { organization } = useProjectContext();
-  console.log(organization);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

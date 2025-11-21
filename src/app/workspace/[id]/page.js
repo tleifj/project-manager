@@ -3,17 +3,15 @@ import Task from "../../components/Task";
 import Link from "next/link";
 import Topbar from "../../components/Topbar";
 import NewProject from "../../components/NewProject";
-import { use } from "react";
 const prisma = new PrismaClient();
 
 export default async function SingleWorkspace({ params }) {
   console.log(params.id);
   const workspace = await prisma.workspace.findUnique({
     where: {
-      id: parseInt(params.id),
+      id: params.id,
     },
   });
-  console.log(workspace);
   if (workspace) {
     workspace.createdAt = workspace.createdAt.toString();
     workspace.updatedAt = workspace.updatedAt.toString();
@@ -21,7 +19,7 @@ export default async function SingleWorkspace({ params }) {
 
   const projectsResults = await prisma.project.findMany({
     where: {
-      workspaceId: parseInt(params.id),
+      workspaceId: params.id,
     },
     // include: { users: true },
   });

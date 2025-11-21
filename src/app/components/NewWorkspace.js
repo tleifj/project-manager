@@ -1,9 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useProjectContext } from "../context/ProjectContext";
 
 export default function NewWorkspace() {
   const router = useRouter();
+  const { organization } = useProjectContext();
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -24,6 +26,8 @@ export default function NewWorkspace() {
     try {
       const body = form;
       // TODO: Get organizationId from context
+
+      body.organizationId = organization.id;
       await fetch("/api/workspace/new", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
