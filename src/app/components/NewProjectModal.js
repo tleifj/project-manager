@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 
 export default function NewProjectModal({ isOpen, onClose, workspaceId }) {
   const [projectName, setProjectName] = useState("");
+  const [workspaces, setWorkspaces] = useState([]);
 
   useEffect(() => {
     const fetchWorkspaces = async () => {

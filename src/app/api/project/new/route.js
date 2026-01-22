@@ -11,7 +11,7 @@ export async function POST(req) {
       name: body.name,
       description: "test",
       workspace: {
-        connect: { id: parseInt(body.workspaceId) },
+        connect: { id: body.workspaceId },
       },
     },
     // include: { workspace: true },
