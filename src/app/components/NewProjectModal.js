@@ -62,7 +62,7 @@ export default function NewProjectModal({ isOpen, onClose, workspaceId }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white">
+      <DialogContent className="bg-background text-foreground">
         <DialogHeader>
           <DialogTitle>Create New Project</DialogTitle>
         </DialogHeader>

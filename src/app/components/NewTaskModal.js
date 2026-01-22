@@ -24,7 +24,7 @@ export default function NewTaskModal({ isOpen, onClose, projectId, status }) {
   const { users, statuses, isLoading } = useProjectContext();
   const [taskName, setTaskName] = useState("");
   const [statusId, setStatusId] = useState(
-    (status && status.id.toString()) || ""
+    (status && status.id.toString()) || "",
   );
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -62,7 +62,7 @@ export default function NewTaskModal({ isOpen, onClose, projectId, status }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white">
+      <DialogContent className="bg-background text-foreground">
         <DialogHeader>
           <DialogTitle>Create New Task</DialogTitle>
         </DialogHeader>
@@ -129,7 +129,7 @@ export default function NewTaskModal({ isOpen, onClose, projectId, status }) {
                           setSelectedUsers([...selectedUsers, user.id]);
                         } else {
                           setSelectedUsers(
-                            selectedUsers.filter((id) => id !== user.id)
+                            selectedUsers.filter((id) => id !== user.id),
                           );
                         }
                       }}

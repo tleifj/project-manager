@@ -20,12 +20,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 text-black p-6">
-      <div className="w-full max-w-sm p-8 bg-white rounded shadow-md space-y-6 text-black">
+    <main className="flex min-h-screen items-center justify-center bg-background text-foreground p-6">
+      <div className="w-full max-w-sm p-8 bg-card rounded shadow-md space-y-6 text-card-foreground">
         <button
           type="button"
           onClick={startGoogle}
-          className="w-full py-2 px-4 rounded bg-blue-600 text-black dark:text-white font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60"
+          className="w-full py-2 px-4 rounded bg-blue-600 font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60"
           disabled={loading}
           aria-label="Continue with Google"
         >

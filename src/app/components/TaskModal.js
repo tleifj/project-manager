@@ -47,12 +47,12 @@ export default function TaskModal({
           setStartDate(
             taskData.startDate
               ? new Date(taskData.startDate).toISOString().slice(0, 16)
-              : ""
+              : "",
           );
           setEndDate(
             taskData.endDate
               ? new Date(taskData.endDate).toISOString().slice(0, 16)
-              : ""
+              : "",
           );
           setSelectedUsers(taskData.users.map((user) => user.id));
         } catch (error) {
@@ -102,7 +102,7 @@ export default function TaskModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white">
+      <DialogContent className="bg-background text-foreground">
         <DialogHeader>
           <DialogTitle className="text-gray-900">
             {taskId ? "Edit Task" : "Create New Task"}
@@ -169,7 +169,7 @@ export default function TaskModal({
                           setSelectedUsers([...selectedUsers, user.id]);
                         } else {
                           setSelectedUsers(
-                            selectedUsers.filter((id) => id !== user.id)
+                            selectedUsers.filter((id) => id !== user.id),
                           );
                         }
                       }}

@@ -14,7 +14,7 @@ export default function Modal({ showModal, setShowModal }) {
   if (showModal) {
     return (
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity flex items-center justify-center">
-        <div className="py-10 px-8 relative transform overflow-hidden rounded-lg bg-white text-black text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+        <div className="py-10 px-8 relative transform overflow-hidden rounded-lg bg-background text-foreground text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
           <X
             onClick={() => setShowModal(false)}
             className="h-4 w-4 absolute top-6 right-6"

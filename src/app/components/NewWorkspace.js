@@ -43,7 +43,7 @@ export default function NewWorkspace() {
     }
   };
   return (
-    <div className="text-black">
+    <div className="text-foreground">
       <h1 className="text-lg">New Workspace</h1>
       <form onSubmit={handleSubmit}>
         <label className="block mt-4 mb-1" htmlFor="workspace-name">
